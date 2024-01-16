@@ -23,7 +23,7 @@ BookMind Archive is a web application designed to help you organize and track yo
 
 1. Clone the repository.
 2. Install dependencies with `npm i`.
-3. Set up your PostgreSQL database and update connection details in `index.js`.
+3. Set up your PostgreSQL database (Refer db_queries.txt) and update connection details in `index.js`.
 4. Run the application with `node index.js`.
 
 ## Technologies Used
