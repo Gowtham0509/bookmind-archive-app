@@ -1,0 +1,46 @@
+<%-include('partials/header.ejs'); -%>
+<div class="create-button">
+    <form action="/create" method="post" >
+        <input type="submit" name="new_note" id="new_note" value="+ Add">
+    </form>
+</div>
+
+<div class="book-notes-container">
+    <% for (let item of listItems){%>
+    <div class="book-note">
+        <div class="book-note-cover">
+            <img src="<%=item.cover_url%>" alt="<%=item.title%>" />
+        </div>
+        <div class="book-note-content">
+            <h2><%= item.title %></h2>
+            <p><strong>By <%= item.author %></strong></p>
+            <p><strong>ISBN: <%= item.isbn%></strong></p>
+            <p><strong>Date Read: <%= item.formatted_date %></strong></p>
+            <p><strong>How strongly I recommend it: <%= item.rating%>/10</strong></p>
+            <p><strong>Overview:</strong></p>
+            <p><%=item.overview%></p>
+            <form action="/full_review" method="post">
+                <input type="hidden" name="book_id" value="<%= item.book_id %>">
+                <button type="submit" >See Notes</button>
+            </form>
+
+            <a href="<%= item.buy_link%>">Buy Link</a>
+        </div>
+        <div class="edit-button">
+            <form action="/edit" method="post" >
+                <input type="hidden" name="book_id" value="<%= item.book_id %>">
+                <input type="submit" name="edit" id="edit" value="Edit">
+            </form>
+        </div>
+        <div class="remove-button">
+            <form action="/remove" method="post" >
+                <input type="hidden" name="book_id" value="<%= item.book_id %>">
+                <input type="submit" name="remove" id="remove" value="Remove">
+            </form>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+
+<%-include('partials/footer.ejs'); -%>

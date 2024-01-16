@@ -1,0 +1,46 @@
+<%-include('partials/header.ejs'); -%>
+<div class="new-form">
+    <form action="/add" method="post">
+        <input type="hidden" name="book_id" value="<%= book.book_id || ''%>">
+        <p>Book Title</p>
+        <input type="text" name="title" id="title" value="<%= book.title || ''%>">
+    
+        <p>Book Author</p>
+        <input type="text" name="author" id="author" value="<%= book.author || ''%>">
+    
+        <p>Book ISBN</p>
+        <input type="text" name="isbn" id="isbn" value="<%= book.isbn || ''%>">
+    
+        <p>Date Read</p>
+        <input type="date" name="date_read" id="date_read" value="<%= book.date_read ? new Date(book.date_read).toISOString().split('T')[0] : '' %>">
+    
+        <p>Book Overview</p>
+        <input type="textarea" name="overview" id="overview" value="<%=book.overview || ''%>">
+
+        <p>Add your Notes</p>
+        <textarea name="notes" id="notes" rows="20" cols="150">
+            <% if(Array.isArray(notes) && notes.length > 0) { %>
+            <% notes.forEach(note => { %>
+                <%= note.note.replace(/<br>/g, '\n') || '' %>
+            <% }); %>
+            <% } else if (notes && notes.note) { %>
+                <%= notes.note.replace(/<br>/g, '\n') %>
+            <% } %>
+        </textarea>
+
+        <p>Your Rating(out of 10)</p>
+        <input type="number" id="rating" name="rating" min="1" max="10" step="0.01" value="<%=book.rating || ''%>" placeholder="Enter rating">
+        
+        <p>Buy Link</p>
+        <input type="text" name="buylink" value="<%= book.buy_link || ''%>">
+
+        <button type="submit">Add</button>
+    
+    </form>
+</div>
+
+
+
+
+
+<%-include('partials/footer.ejs'); -%>

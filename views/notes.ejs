@@ -1,0 +1,29 @@
+<%-include('partials/header.ejs'); -%>
+
+
+<div class="book-notes-container">
+    <% for (let note of notes) { %>
+    <div class="book-note">
+        <div class="book-note-cover">
+            <img src="<%=book.cover_url%>" alt="<%=book.title%>" />
+        </div>
+        <div class="book-note-content">
+            <h2><%= book.title %></h2>
+            <p><strong>By <%= book.author %></strong></p>
+            <p><strong>ISBN: <%= book.isbn%></strong></p>
+            <p><strong>Date Read: <%= book.date_read %></strong></p>
+            <p><strong>How strongly I recommend it: <%= book.rating%>/10</strong></p>
+            <p><strong>Overview:</strong></p>
+            <p><%=book.overview%></p>
+            <p><strong>My Notes :</strong></p>
+            <p><strong>Written :</strong><%=note.formatted_date%></p>
+            <p class="line-breaks"><%-note.note.replace(/<br>/g, '\n')%></p>
+            <a href="<%= book.buy_link%>">Buy Link</a>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+
+
+<%-include('partials/footer.ejs'); -%>
