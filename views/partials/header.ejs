@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 </head>
 <body>
     <main>
@@ -22,15 +22,22 @@
                 <li><a href="/contact">Contact</a></li>
             </ul>
             <div class="sort-container">
+                <form class="sorting" action="/" method="get" id="sortForm">
                 <label for="sortBy">Sort By:</label>
                 <select name="sortBy" id="sortBy" >
-                    <option value="date">By Date</option>
+                    <option value="date_read">By Date</option>
                     <option value="rating">By Rating</option>
-                    <option value="name">By Name</option>
+                    <option value="title">By Title</option>
                 </select>
+                <select name="sortOrder" id="sortOrder">
+                    <option value="desc">Descending</option>
+                    <option value="asc">Ascending</option>
+                </select>
+                <button type="submit" class="sort" name="sort-books">Sort</button>
+            </form>
             </div>
             <div class="search-container">
-                <form class="search-item" action="/search" method="post"">
+                <form class="search-item" action="/" method="get">
                     <input type="text" id="searchInput" name="searchInput" placeholder="Search">
                     <button type="submit" class="search" name="search-book">Search</button>
                 </form>

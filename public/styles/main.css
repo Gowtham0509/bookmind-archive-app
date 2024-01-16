@@ -3,13 +3,20 @@
     text-decoration: none;
     list-style: none;
     font-weight: bold;
-    font-family: 'Oswald', sans-serif;  
+    /* font-family: 'Oswald', sans-serif;   */
+    font-family: 'Playfair Display', serif;
 }
 
 body {
     background-color: #0F0F0F;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+main {
+  flex: 1;
+}
 header{
     height: 65px;
     width: 100%;
@@ -84,12 +91,29 @@ header ul li a:hover{
     color:white
 }
 
+.sort-container button {
+    color:black;
+    padding: 0px 10px; 
+    margin: 25px 10px;
+    margin-left: 0px;
+    font-size: 15px;
+    border: none;
+    border-radius:10px;
+    height: 30px;
+}
+
+.sort-container button:hover{
+  border: 2px solid red;
+}
+
+
 .search-container{
     display: flex;
     padding-right: 10px;
     align-items: center;
     /* line-height: 60px; */
 }
+
 
 .search-container label{
     margin:5px 5px;
@@ -292,12 +316,6 @@ header ul li a:hover{
         background-color: rgba(240, 240, 250, 0.8); }
     
 
-  footer {
-    flex: 0 0 auto;
-    color: white;
-    text-align: center;
-  }
-
   .cover-links {
     margin-left: 225px;
   }
@@ -316,4 +334,77 @@ header ul li a:hover{
 
   .line-breaks {
     white-space: pre-line;
+}
+
+/* Add specific styles for contact.ejs here */
+.contact-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #232D3F;
+  border-radius: 8px;
+  color: white;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-container p{
+  font-size: 20px;
+}
+.contact-form label {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.contact-form input, .contact-form textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  border: 1px solid #005B41;
+  border-radius: 5px;
+  background-color: #232D3F;
+  color: white;
+  font-size: 14px;
+}
+
+.contact-form button {
+  background-color: #008170;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.contact-form button:hover {
+  background-color: #005B41;
+}
+
+.twitter a{
+  color: red;
+  font-size: 25px;
+} 
+
+.email a{
+  color: aqua;
+}
+ 
+.about-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #232D3F;
+  border-radius: 8px;
+  color: white;
+}
+
+
+footer {
+  flex: 0 0 auto;
+  color: white;
+  text-align: center;
+  flex-shrink: 0;
 }

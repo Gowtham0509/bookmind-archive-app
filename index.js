@@ -2,7 +2,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import axios from "axios";
-import imageSize from "image-size";
 
 const app = express();
 const port = 3000;
@@ -22,45 +21,41 @@ db.connect();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-async function fetchImageDimensions(url) {
-    // const img = new Image();
-    // return new Promise((res, rej) => {
-    //     img.onload = () => res({width:img.width, height: img.height });
-    //     img.onerror = e => rej(e);
-    //     img.src = url;
-    // });
-    try {
-        const dimensions = imageSize(url);
-        return dimensions;
-    }catch(err){
-        console.log("Error getting image dimension", err);
-        return {width:0, height:0};
-    }
-}
-
-async function getCoverInfo(isbn) {
-    const API_URL = "https://covers.openlibrary.org/b/isbn/";
-    const coverUrl = await axios.get(`${API_URL}${isbn}-L.jpg`);
-    console.log(`${API_URL}${isbn}-L.jpg`);
-
-    const dimensions = await fetchImageDimensions(coverUrl)
-    const coverInfo = {
-        url: coverUrl,
-        width: dimensions.width,
-        height: dimensions.height
-    };
-    return coverInfo;
-}
 
 app.get("/", async (req, res) => {
     try{
-        // const coverInfo = await getCoverInfo('9787806574584');
-        // console.log(coverInfo);
-        const result = await db.query("SELECT book_id,title, author, cover_url, isbn, to_char(date_read, 'YYYY-MM-DD') as formatted_date, overview, rating, buy_link  FROM books ORDER BY date_read DESC");
-        let items = result.rows;
-        res.render("index.ejs",{
-           listItems: items, 
-        });
+        if(req.query.searchInput) {
+            //search 
+            const searchInput = req.query.searchInput;
+            const query = ` SELECT book_id, title, author, cover_url, isbn, to_char(date_read, 'YYYY-MM-DD') as formatted_date, overview, rating, buy_link
+            FROM books WHERE lower(title) LIKE $1 OR lower(author) LIKE $1 OR lower(isbn) LIKE $1
+            ORDER BY date_read DESC`;
+
+            const result = await db.query(query, [`%${searchInput.toLowerCase()}%`]);
+            let items = result.rows
+            res.render("index.ejs", {
+                listItems: items,
+            });
+        } else{
+            // Default rendering
+            const sortBy = req.query.sortBy || "date_read";
+            const sortOrder = req.query.sortOrder || "desc";
+
+            let query = "SELECT book_id, title, author, cover_url, isbn, to_char(date_read, 'YYYY-MM-DD') as formatted_date, overview, rating, buy_link FROM books";
+
+            if(sortBy) {
+                query += ` ORDER BY ${sortBy} ${sortOrder === "asc" ? "ASC" : "DESC"}`;
+            } else{
+                query += " ORDER BY date_read DESC";
+            }
+
+            const result = await db.query(query);
+            let items = result.rows;
+            res.render("index.ejs", {
+                listItems: items,
+            });
+        }
+        
     }catch(err){
         console.log(err);
     }
@@ -96,9 +91,7 @@ app.post("/add", async (req, res) =>{
             await db.query("UPDATE notes SET note = $1, write_date = $2 WHERE book_id = $3",
             [sanitizedNote, dateRead, bookId]);
             console.log("Form processed successfully");
-            console.log("Before redirect");
             res.redirect(`/full_review?book_id=${bookId}`);
-            console.log("After redirect");
         } else{
              const book = await db.query("INSERT INTO books (title, author, cover_url, isbn, date_read, overview, rating, buy_link) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
             [title, author, cover, isbn, dateRead, overview, rating, buy_link]);
@@ -127,7 +120,7 @@ app.post("/add", async (req, res) =>{
             [bookId]);
             let list = result.rows;
     
-            console.log(bookInfo);
+            // console.log(bookInfo);
             res.render("notes.ejs",{
                 book:item[0],
                 notes: list,
@@ -147,9 +140,7 @@ app.post("/add", async (req, res) =>{
             const result = await db.query("SELECT note_id, book_id, note, to_char(write_date, 'YYYY-MM-DD') as formatted_date FROM notes WHERE book_id = $1",
             [bookId]);
             let list = result.rows;
-    
-            console.log(bookInfo);
-            res.render("notes.ejs",{
+                res.render("notes.ejs",{
                 book:item[0],
                 notes: list,
                 editNote: false,
@@ -180,7 +171,7 @@ app.post("/edit", async (req, res)=>{
 
 app.post("/remove", async (req, res) => {
     const bookId = req.body.book_id;
-    console.log(bookId);
+    // console.log(bookId);
     if (req.body.remove === "Remove") {
         try {
             await db.query("DELETE FROM notes WHERE book_id = $1", [bookId]);
@@ -190,16 +181,13 @@ app.post("/remove", async (req, res) => {
 
         } catch (err) {
             console.error(err);
-            // Internal server error
             res.status(500).json({ success: false, message: "Internal server error." });
         }
     } else {
-        // Bad request format
         res.status(400).json({ success: false, message: "Bad request format." });
     }
 
 });
-
 
 
 app.get("/about", (req, res)=>{
@@ -209,7 +197,6 @@ app.get("/about", (req, res)=>{
 app.get("/contact", (req, res) => {
     res.render("contact.ejs");
 });
-
 
 
 app.listen(port, () => {
