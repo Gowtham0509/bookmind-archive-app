@@ -1,0 +1,28 @@
+Below are the PostgreSQL SQL queries for creating the database and tables:
+
+1.Create Database:
+    CREATE DATABASE book_notes;
+
+2.Create books Table:
+
+    CREATE TABLE books (
+        book_id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        author VARCHAR(255),
+        isbn VARCHAR(13),
+        cover_url TEXT,
+        date_read DATE,
+        overview TEXT,
+        rating DOUBLE/FLOAT,
+        buy_link TEXT
+    );
+
+3.Create notes Table:
+
+    CREATE TABLE notes (
+        note_id SERIAL PRIMARY KEY,
+        book_id INTEGER REFERENCES books(book_id) ON DELETE CASCADE,
+        note TEXT,
+        write_date DATE
+    );
+
