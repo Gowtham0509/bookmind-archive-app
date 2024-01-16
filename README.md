@@ -17,6 +17,7 @@ BookMind Archive is a web application designed to help you organize and track yo
 1. **Add a New Book:** Click on the "+Add" button to add a new book, providing details and notes.
 2. **Edit and Remove:** Easily edit or remove books from your catalog.
 3. **Full Review:** View detailed notes and information about a specific book.
+4. **Get Book Covers From:**[https://openlibrary.org/dev/docs/api/covers](https://openlibrary.org/dev/docs/api/covers)
 
 ## Setup
 
